@@ -25,5 +25,5 @@ typings/
 .yarn-integrity
 .env
 .idea
-dist
-!dist/.gitkeep
+/dist/*
+!/dist/.gitkeep
