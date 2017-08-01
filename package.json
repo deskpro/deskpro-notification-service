@@ -1,0 +1,21 @@
+{
+  "name": "deskpro-notifications-service",
+  "version": "0.0.1",
+  "description": "standalone node application to deliver notfications",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "rimraf": "^2.6.1"
+  },
+  "scripts": {
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --source-maps --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "start": "npm run build && node dist/index.js"
+  }
+}
