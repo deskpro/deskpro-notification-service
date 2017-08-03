@@ -27,3 +27,4 @@ typings/
 .idea
 /dist/*
 !/dist/.gitkeep
+config.json

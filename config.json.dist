@@ -1,0 +1,4 @@
+{
+  "jwtSecret": "put your secret here",
+  "port":      "the port number to bind"
+}
