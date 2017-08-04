@@ -4,7 +4,6 @@
   "description": "standalone node application to deliver notfications",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "immutable": "^3.8.1",
     "socket.io": "^2.0.3",
@@ -17,7 +16,9 @@
     "rimraf": "^2.6.1"
   },
   "scripts": {
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --source-maps --ignore ./config.json.dist,./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "start": "npm run build && node dist/index.js"
+    "dev:build": "rimraf dist/ && babel ./ --out-dir dist/ --source-maps --ignore ./config.json,./config.json.dist,./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "prod:build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./config.json,./config.json.dist,./node_modules,./.babelrc,./package.json,./package-lock.json,./npm-debug.log,./README.md --copy-files",
+    "dev:start": "npm run build && node dist/index.js",
+    "prod:start": "npm run prod:build && node dist/index.js & > /dev/null 2>&1"
   }
 }

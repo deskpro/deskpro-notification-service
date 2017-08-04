@@ -15,6 +15,7 @@ export default class HttpServer
     app.use(bodyParser.json());
     this.server = http.Server(app);
     app.post('/send', this.handlePost.bind(this));
+    app.post('/test', this.handleTest.bind(this));
   }
 
   getServer() {
@@ -32,7 +33,21 @@ export default class HttpServer
         this.socketsManager.sendMessage(item);
       });
     } catch(e) {
-      // error
+      res.statusCode = 400;
+      res.write(JSON.stringify({error: 'token is invalid'}), 'utf-8')
+    }
+    res.end();
+  }
+
+  handleTest(req, res) {
+    try {
+      const decoded = jwt.verify(req.body.jwt, this.secret);
+      if(decoded.test && decoded.test === true) {
+        res.write(JSON.stringify({success: true}), 'utf-8')
+      }
+    } catch(e) {
+      res.statusCode = 400;
+      res.write(JSON.stringify({error: 'token is invalid'}), 'utf-8')
     }
     res.end();
   }
