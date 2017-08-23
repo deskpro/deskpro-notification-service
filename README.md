@@ -1,17 +1,10 @@
 # Running deskpro-notification-service
 
---------
-**Disclaimer**:
-
-Please note it's just a Proof-Of-Concept, so the code is dirty and security is absent almost at all, but auth only.
-
-Also do not forget to checkout ``deskpro-notification-service`` branch for main repository.
-
---------
-
 ## Installing dependencies
 
-After checkout, run npm:
+1. Clone or download this repo
+
+2. After that install all dependencies:
 
     $ npm install
 
