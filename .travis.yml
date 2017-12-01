@@ -1,0 +1,5 @@
+language: "javascript"
+install:
+  - npm install
+  - mv config.json.test config.json
+script: npm run test
