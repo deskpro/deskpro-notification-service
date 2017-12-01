@@ -20,6 +20,7 @@ const SocketsServer =  (server, socketsManager, config) => {
         console.log(`Socket with id: ${socket.id} successfully authenticated`);
       }
       socketsManager.addSocket(socket.decoded_token.id, socket);
+      socketsManager.addSocket('agent_public', socket); // automatically subscribe to agent broadcast channel
     });
 };
 

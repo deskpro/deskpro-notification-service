@@ -18,7 +18,7 @@
   "scripts": {
     "dev:build": "rimraf dist/ && babel ./ --out-dir dist/ --source-maps --ignore ./config.json,./config.json.dist,./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "prod:build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./config.json,./config.json.dist,./node_modules,./.babelrc,./package.json,./package-lock.json,./npm-debug.log,./README.md --copy-files",
-    "dev:start": "npm run build && node dist/index.js",
+    "dev:start": "npm run dev:build && node dist/index.js",
     "prod:start": "npm run prod:build && node dist/index.js & > /dev/null 2>&1"
   }
 }
