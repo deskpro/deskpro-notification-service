@@ -13,11 +13,11 @@ export default class SocketsManager
       this.sockets.get(message.channel).map((socket) => {
         if(this.debug) {
           console.log(`
-            =======================
-            New message via channel: ${message.channel}
-            Message name: ${message.name}
-            Data: ${JSON.stringify(message.data, null, 2)}
-            =======================\r\n
+=======================
+New message via channel: ${message.channel}
+Message name: ${message.name}
+Data: ${JSON.stringify(message.data, null, 2)}
+=======================\r\n
           `);
         }
 
