@@ -8,7 +8,7 @@ export default class HttpServer
 {
   constructor(config, socketsManager) {
     this.port   = config.port;
-    this.secret = config.secret;
+    this.secret = config.jwtSecret;
     this.host = config.host ? config.host : 'localhost';
     this.socketsManager = socketsManager;
 
