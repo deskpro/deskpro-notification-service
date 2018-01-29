@@ -3,6 +3,7 @@
 import HttpServer from './HttpServer';
 import SocketsManager from './SocketsManager';
 import SocketsServer from './SocketServer';
+import fs from 'fs';
 
 const config = require('../config.json');
 
@@ -13,9 +14,18 @@ if(!config.jwtSecret) {
   throw new Error('Please specify the secret key which would be used to encrypt auth and messages');
 }
 
-const socketsManager = new SocketsManager();
 
-const httpServer = new HttpServer(config.port, config.jwtSecret, socketsManager);
+if(config.secure) {
+  if(!config.keyFile || !config.certFile) {
+    throw new Error('If you want to use secure connection you have to config paths to certificate and key files');
+  }
+  config.key  = fs.readFileSync(config.keyFile);
+  config.cert = fs.readFileSync(config.certFile);
+}
+
+const socketsManager = new SocketsManager(config);
+
+const httpServer = new HttpServer(config, socketsManager);
 
 SocketsServer(httpServer.getServer(), socketsManager, config);
 

@@ -1,19 +1,30 @@
 import express from 'express';
 import http from 'http';
+import https from 'https';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 
 export default class HttpServer
 {
-  constructor(port, secret, socketsManager) {
-    this.port = port;
-    this.secret = secret;
+  constructor(config, socketsManager) {
+    this.port   = config.port;
+    this.secret = config.secret;
+    this.host = config.host ? config.host : 'localhost';
     this.socketsManager = socketsManager;
 
     const app = express();
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    this.server = http.Server(app);
+    if (config.secure) {
+      const options = {
+        key: config.key,
+        cert: config.cert
+      };
+      this.server = https.createServer(options, app);
+    } else {
+      this.server = http.Server(app);
+    }
+
     app.post('/send', this.handlePost.bind(this));
     app.post('/test', this.handleTest.bind(this));
   }
@@ -23,7 +34,7 @@ export default class HttpServer
   }
 
   run() {
-    this.server.listen(this.port);
+    this.server.listen({port: this.port, host: this.host});
   }
 
   handlePost(req, res) {
