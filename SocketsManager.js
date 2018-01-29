@@ -14,7 +14,7 @@ export default class SocketsManager
         if(this.debug) {
           console.log(`
             =======================
-            New message via channel ${message.channel}:
+            New message via channel: ${message.channel}
             Message name: ${message.name}
             Data: ${JSON.stringify(message.data, null, 2)}
             =======================\r\n
