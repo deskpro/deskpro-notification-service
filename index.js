@@ -2,7 +2,6 @@
 
 import HttpServer from './HttpServer';
 import SocketsManager from './SocketsManager';
-import SocketsServer from './SocketServer';
 import fs from 'fs';
 
 const config = require('../config.json');
@@ -27,7 +26,7 @@ const socketsManager = new SocketsManager(config);
 
 const httpServer = new HttpServer(config, socketsManager);
 
-SocketsServer(httpServer.getServer(), socketsManager, config);
+socketsManager.runSocketServer(httpServer.getServer());
 
 httpServer.run();
 

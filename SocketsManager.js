@@ -1,29 +1,49 @@
-import Immutable from 'immutable';
+import SocketIO from 'socket.io';
+import socketioJwt from 'socketio-jwt';
 
 export default class SocketsManager
 {
   constructor(config) {
     this.debug = config.debug;
-    this.sockets = Immutable.Map({});
-    this.socketsMap = Immutable.Map({});
+    this.secret = config.jwtSecret;
   }
-  
+
+  runSocketServer(httpServer) {
+    const debug = this.debug;
+    const jwtSecret = this.secret;
+    this.ioServer = new SocketIO(httpServer)
+      .on('connection', socketioJwt.authorize({ secret: jwtSecret, timeout: 15000 }))
+      .on('connection', (socket) => {
+        if(debug) {
+          console.log(`Socket with id ${socket.id} connected`);
+        }
+        socket.on('disconnect', function () {
+          if(debug) {
+            console.log(`Socket with id ${socket.id} disconnected`);
+          }
+        });
+      })
+      .on('authenticated', (socket) => {
+        if(debug) {
+          console.log(`Socket with id ${socket.id} successfully authenticated`);
+        }
+        this.addSocket(socket.decoded_token.id, socket);
+        this.addSocket('agent_public', socket); // automatically subscribe to agent broadcast channel
+      });
+  }
+
   sendMessage(message) {
-    if (this.sockets.has(message.channel) && this.sockets.get(message.channel).length > 0) {
-      if(this.debug) {
-        console.log(`
+    if(this.debug) {
+      console.log(`
 =======================
 New message via channel: ${message.channel}
 Message name: ${message.name}
 Data: ${JSON.stringify(message.data, null, 2)}
 =======================\r\n
           `);
-      }
-
-      this.sockets.get(message.channel).map((socket) => {
-        socket.emit(`${message.channel}-${message.name}`, message.data);
-      });
     }
+
+    this.ioServer.in(message.channel).emit(`${message.channel}-${message.name}`, message.data);
   }
   
   addSocket(userId, socket) {
@@ -33,32 +53,10 @@ Data: ${JSON.stringify(message.data, null, 2)}
     } else {
       channel = userId;
     }
-
-    const newSockets = this.sockets.has(channel) ? this.sockets.get(channel) : [];
-    newSockets.push(socket);
-    this.sockets = this.sockets.set(channel, newSockets);
-    const newUsers = this.socketsMap.has(socket.id) ? this.socketsMap.get(socket.id) : [];
-    newUsers.push(channel);
-    this.socketsMap = this.socketsMap.set(socket.id, newUsers);
+    socket.join(channel);
 
     if(this.debug) {
-      console.log(`Socket with id ${socket.id} added for on channel ${channel}`);
+      console.log(`Socket with id ${socket.id} added on channel ${channel}`);
     }
   };
-
-  deleteSocket(socket) {
-    if(this.socketsMap.has(socket.id)) {
-      const removeFromArray = this.socketsMap.get(socket.id);
-      let newSockets;
-      removeFromArray.map(removeFrom => {
-        newSockets = this.sockets.get(removeFrom).filter((item) => item.id !== socket.id);
-        if(this.debug) {
-          console.log(`Socket with id ${socket.id} removed from channel ${removeFrom}`);
-        }
-        this.sockets = this.sockets.set(removeFrom, newSockets);
-      });
-
-      this.socketsMap = this.socketsMap.delete(socket.id);
-    }
-  }
 }
