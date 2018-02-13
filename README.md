@@ -18,6 +18,9 @@ Copy `config.json.dist` -> `config.json`
 
 Fill up config file with propper secret and port number you want to bind.
 
+Also you may want to use secure connections, so don't forget to enable `secure` in config
+and provide paths to your key and certificate files.
+
 ## Run the code
 
     $ node dist/index.js

@@ -1,5 +1,9 @@
 {
   "jwtSecret": "put your secret here",
   "port":      "the port number to bind",
-  "debug":     false
+  "host":      "you may specify host (ip), e.g. my-dp-ns.mysupport.net (1.1.1.1) to bind to",
+  "debug":     false,
+  "secure":    false,
+  "keyFile":   "/path/to/private.key",
+  "certFile":  "/path/to/certificate/bundle"
 }
