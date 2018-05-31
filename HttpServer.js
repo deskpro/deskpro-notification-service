@@ -14,7 +14,7 @@ export default class HttpServer
 
     const app = express();
     app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({ limit: config.maxBody ? config.maxBody : '100kb' }));
     if (config.secure) {
       const options = {
         key: config.key,
