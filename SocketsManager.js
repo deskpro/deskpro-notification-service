@@ -28,6 +28,7 @@ export default class SocketsManager
           console.log(`Socket with id ${socket.id} successfully authenticated`);
         }
         this.addSocket(socket.decoded_token.id, socket);
+        if(socket.decoded_token.id)
         this.addSocket('agent_public', socket); // automatically subscribe to agent broadcast channel
       });
   }
@@ -49,9 +50,9 @@ Data: ${JSON.stringify(message.data, null, 2)}
   addSocket(userId, socket) {
     let channel;
     if(parseInt(userId, 10)) {
-      channel = `private-${userId}`
+      channel = `private-${parseInt(userId, 10)}`
     } else {
-      channel = userId;
+      channel = `private-${userId}`;
     }
     socket.join(channel);
 
