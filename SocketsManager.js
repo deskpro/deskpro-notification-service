@@ -28,8 +28,9 @@ export default class SocketsManager
           console.log(`Socket with id ${socket.id} successfully authenticated`);
         }
         this.addSocket(socket.decoded_token.id, socket);
-        if(socket.decoded_token.id)
-        this.addSocket('agent_public', socket); // automatically subscribe to agent broadcast channel
+        if(socket.decoded_token.id) {
+          this.addSocket('agent_public', socket, true); // automatically subscribe to agent broadcast channel
+        }
       });
   }
 
@@ -47,12 +48,13 @@ Data: ${JSON.stringify(message.data, null, 2)}
     this.ioServer.in(message.channel).emit(`${message.channel}-${message.name}`, message.data);
   }
   
-  addSocket(userId, socket) {
+  addSocket(userId, socket, noPrefix = false) {
     let channel;
+    const prefix = !noPrefix ? 'private-' : '';
     if(parseInt(userId, 10)) {
-      channel = `private-${parseInt(userId, 10)}`
+      channel = `${prefix}${parseInt(userId, 10)}`
     } else {
-      channel = `private-${userId}`;
+      channel = `${prefix}${userId}`;
     }
     socket.join(channel);
 
