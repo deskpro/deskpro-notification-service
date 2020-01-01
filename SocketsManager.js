@@ -31,6 +31,9 @@ export default class SocketsManager
         if(socket.decoded_token.id && !socket.decoded_token.by_visitor) {
           this.addSocket('agent_public', socket, true); // automatically subscribe to agent broadcast channel
         }
+        if(socket.decoded_token.by_visitor) {
+          this.addSocket('user_public', socket, true); // automatically subscribe to user broadcast channel
+        }
       });
   }
 
