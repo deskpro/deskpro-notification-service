@@ -51,9 +51,12 @@ Data: ${JSON.stringify(message.data, null, 2)}
     this.ioServer.in(message.channel).emit(`${message.channel}-${message.name}`, message.data);
   }
 
-  addSocket(userId, socket, noPrefix = false) {
+  addSocket(userId, socket, broadcast = false) {
     let channel;
-    const prefix = !noPrefix ? 'private-' : '';
+    let prefix = !broadcast ? 'private-' : '';
+    if(socket.decoded_token.prefix) {
+      prefix = `${prefix}${socket.decoded_token.prefix}-`
+    }
     if(!isNaN(userId) && parseInt(userId, 10)) {
       channel = `${prefix}${parseInt(userId, 10)}`
     } else {
