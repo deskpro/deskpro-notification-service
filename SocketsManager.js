@@ -27,7 +27,9 @@ export default class SocketsManager
         if(debug) {
           console.log(`Socket with id ${socket.id} successfully authenticated`);
         }
-        this.addSocket(socket.decoded_token.id, socket);
+        if(socket.decoded_token.id) {
+          this.addSocket(socket.decoded_token.id, socket);
+        }
         if(socket.decoded_token.id && !socket.decoded_token.by_visitor) {
           this.addSocket('agent_public', socket, true); // automatically subscribe to agent broadcast channel
         }
